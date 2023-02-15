@@ -6,10 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import datetime
 import redis
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from dotenv import dotenv_values
 
-config = dotenv_values(".env")
 
 # setup app and database
 app = FastAPI()
@@ -38,6 +37,8 @@ class Prompt(BaseModel):
     prompt: str
     license: str
     email: str
+
+config = dotenv_values(".env")
 
 openai.api_key = config['OPENAI_API_KEY']
     
