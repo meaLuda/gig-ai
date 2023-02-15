@@ -129,4 +129,4 @@ async def gigai(prompt: Prompt):
 
 # change the host here to local host.
 if __name__ == "__main__":
-    uvicorn.run("main:app", host=HOST, port=8000, log_level="info")
+    uvicorn.run("main:app", host=HOST, port=8000, reload=True,log_level="info")
