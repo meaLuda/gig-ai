@@ -41,7 +41,7 @@ class Prompt(BaseModel):
 config = dotenv_values(".env")
 
 # use your own key here
-openai.api_key = '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'
+openai.api_key = config['OPENAI_API_KEY']
     
 
 # Define the key for storing the count of prompts for each user license
@@ -59,7 +59,7 @@ Respond accordingly to the following job description: \n \n
 """
 
 # Define the limit of prompts per day per user license
-PROMPT_LIMIT = 3
+PROMPT_LIMIT = 15
 # PROMPT_LIMIT = 3
 
 count = 0 # count of times the root has been called
@@ -99,7 +99,7 @@ async def gigai(prompt: Prompt):
 
     if prompt.prompt and isinstance(prompt.prompt, str) and len(prompt.prompt.strip()) > 30:
         # remove await if not working.
-        response = await openai.Completion.create(
+        response = openai.Completion.create(
             model="text-davinci-003",
             prompt= GIG_PROMPTS + prompt.prompt,
             temperature=0.7,
@@ -117,4 +117,4 @@ async def gigai(prompt: Prompt):
 
 # change the host here to local host.
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="176.58.111.181", port=8000, log_level="info")
+    uvicorn.run("main:app", host="localhost", port=8000, log_level="info")
