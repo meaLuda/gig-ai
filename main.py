@@ -40,7 +40,7 @@ class Prompt(BaseModel):
 
 config = dotenv_values(".env")
 
-openai.api_key = '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'
+openai.api_key = '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'
     
 
 # Define the key for storing the count of prompts for each user license
