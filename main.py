@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import datetime
 import redis
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from dotenv import dotenv_values
 
 
@@ -38,10 +38,18 @@ class Prompt(BaseModel):
     license: str
     email: str
 
-config = dotenv_values(".env")
+
+if os.environ['DEV'] == True:
+    HOST = "176.58.111.181"
+    config = os.environ['OPENAI_API_KEY']
+    openai.api_key = config['OPENAI_API_KEY']   
+else:
+    HOST ="localhost"
+    config = dotenv_values(".env")
+    openai.api_key = config['OPENAI_API_KEY']
+    
 
 # use your own key here
-openai.api_key = config['OPENAI_API_KEY']
     
 
 # Define the key for storing the count of prompts for each user license
@@ -117,4 +125,4 @@ async def gigai(prompt: Prompt):
 
 # change the host here to local host.
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="176.58.111.181", port=8000, log_level="info")
+    uvicorn.run("main:app", host=HOST, port=8000, log_level="info")
