@@ -2,6 +2,8 @@ import os
 import uvicorn
 from fastapi import FastAPI
 import openai
+
+
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import datetime
@@ -40,9 +42,10 @@ class Prompt(BaseModel):
 
 env_dev = os.environ['DEV']
 print(env_dev)
+env_key = os.environ['OPENAI_API_KEY']
 if  env_dev == True:
     HOST = "176.58.111.181"
-    openai.api_key = os.environ['OPENAI_API_KEY']
+    openai.api_key = env_key
 else:
     HOST ="localhost"
     config = dotenv_values(".env")
