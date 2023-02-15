@@ -8,7 +8,7 @@ import redis
 from dotenv import load_dotenv
 from dotenv import dotenv_values
 
-config = dotenv_values(".env.local")
+config = dotenv_values(".env")
 
 # setup app and database
 app = FastAPI()
@@ -20,6 +20,7 @@ r = redis.Redis(host='localhost',port=6379,db=0)
 
 origins = [
     "*", # allow all origins
+    "176.58.111.181"
 ]
 
 app.add_middleware(
