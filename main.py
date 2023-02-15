@@ -110,3 +110,7 @@ async def gigai(prompt: Prompt):
         return {"message": response.choices[0].text}
     else:
             return {"message": "Sorry this does not look like a job description, try again"}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="176.58.111.181", port=8000, log_level="info")
