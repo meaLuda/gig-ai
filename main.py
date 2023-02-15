@@ -38,8 +38,9 @@ class Prompt(BaseModel):
     license: str
     email: str
 
-
-if os.environ['DEV'] == True:
+env_dev = os.environ['DEV']
+print(env_dev)
+if  env_dev == True:
     HOST = "176.58.111.181"
     openai.api_key = os.environ['OPENAI_API_KEY']
 else:
