@@ -41,8 +41,7 @@ class Prompt(BaseModel):
 
 if os.environ['DEV'] == True:
     HOST = "176.58.111.181"
-    config = os.environ['OPENAI_API_KEY']
-    openai.api_key = config['OPENAI_API_KEY']   
+    openai.api_key = os.environ['OPENAI_API_KEY']
 else:
     HOST ="localhost"
     config = dotenv_values(".env")
