@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from fastapi import FastAPI
 import openai
 from fastapi.middleware.cors import CORSMiddleware
