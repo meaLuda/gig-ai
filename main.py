@@ -40,6 +40,7 @@ class Prompt(BaseModel):
 
 config = dotenv_values(".env")
 
+# use your own key here
 openai.api_key = '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'
     
 
@@ -97,7 +98,8 @@ async def gigai(prompt: Prompt):
         return {"error": "Too many prompts today."}
 
     if prompt.prompt and isinstance(prompt.prompt, str) and len(prompt.prompt.strip()) > 30:
-        response = openai.Completion.create(
+        # remove await if not working.
+        response = await openai.Completion.create(
             model="text-davinci-003",
             prompt= GIG_PROMPTS + prompt.prompt,
             temperature=0.7,
@@ -113,6 +115,6 @@ async def gigai(prompt: Prompt):
     else:
             return {"message": "Sorry this does not look like a job description, try again"}
 
-
+# change the host here to local host.
 if __name__ == "__main__":
     uvicorn.run("main:app", host="176.58.111.181", port=8000, log_level="info")
