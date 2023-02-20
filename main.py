@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import datetime
 import redis
-from dotenv import load_dotenv
+from dotenv import load_dotenv,dotenv_values
 
 load_dotenv()
 
@@ -45,8 +45,8 @@ env_dev = os.environ['DEV']
 # print(env_dev)
 
 # environment set-up must have these in your local and dev path
-env_key = os.environ['OPENAI_API_KEY']
 if  env_dev == 'True':
+    env_key = os.environ['OPENAI_API_KEY']
     HOST = "176.58.111.181"
     openai.api_key = env_key
 
