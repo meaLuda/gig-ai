@@ -9,7 +9,8 @@ from pydantic import BaseModel
 import datetime
 import redis
 from dotenv import load_dotenv
-from dotenv import dotenv_values
+
+load_dotenv()
 
 
 # setup app and database
@@ -41,7 +42,9 @@ class Prompt(BaseModel):
     email: str
 
 env_dev = os.environ['DEV']
-print(env_dev)
+# print(env_dev)
+
+# environment set-up must have these in your local and dev path
 env_key = os.environ['OPENAI_API_KEY']
 if  env_dev == 'True':
     HOST = "176.58.111.181"
@@ -129,4 +132,4 @@ async def gigai(prompt: Prompt):
 
 # change the host here to local host.
 if __name__ == "__main__":
-    uvicorn.run("main:app", host=HOST, port=8000, log_level="info")
+    uvicorn.run("main:app", host=HOST, port=8000, reload=True,log_level="info")
