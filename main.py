@@ -118,10 +118,10 @@ async def gigai(prompt: Prompt):
             model="text-davinci-003",
             prompt= GIG_PROMPTS + " \n \n "+prompt.prompt,
             temperature=0.7,
-            max_tokens=256,
+            max_tokens=1000,
             top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0
+            frequency_penalty=1,
+            presence_penalty=1
         )
 
         # Your code to handle the prompt goes here
