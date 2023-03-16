@@ -16,3 +16,6 @@ class RedisClient:
             cls._instance = redis.Redis(host='localhost',port=6379,db=0) 
             # print("connection true")
         return cls._instance
+    
+
+redis_client_ = RedisClient()
