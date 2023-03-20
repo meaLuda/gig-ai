@@ -1,22 +1,14 @@
 import os
 import uvicorn
 from fastapi import FastAPI
-import openai
-
-
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-import datetime
-import redis
 
 # other api's
-from gigwins.api import gigwins as gw
-from jobwins.api import jobwins as jw
 from dotenv import load_dotenv
-
 # load all env variables to the system
 load_dotenv()
-
+from gigwins.api import gigwins as gw
+from jobwins.api import jobwins as jw
 app = FastAPI()
 
 origins = [

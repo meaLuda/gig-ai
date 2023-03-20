@@ -10,7 +10,7 @@ sys.path.append("..")
 # ~infile code imports 
 from .models import Prompt
 # connection to redis
-from redisclientconnect import redis_client_
+from redis_connect import redis_client_
 
 # ~ pre-prompt imports
 from pre_prompts import GIG_PROMPTS
@@ -53,7 +53,6 @@ KEY_TEMPLATE = 'prompt-count-{}-{}'
 async def test_gigwins():
     return {
         "GigwinsTest":"Success",
-        "Environemnt loaded":f"ENV VARIABLE LOADED {get_env_var('DEV')} ====> FROM GigWINS"
     }
 
 
@@ -80,21 +79,21 @@ async def test_prompt(prompt:Prompt):
     else:
         redis_client_.incr(f"key-from-gigwins-{key}")
     
-    # Check if the prompt is a job description ~ i presume should be greater than 30 characters.
-    if prompt.prompt and isinstance(prompt.prompt, str) and len(prompt.prompt.strip()) > 30:
-        # remove await if not working.
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt= GIG_PROMPTS + " \n \n "+ prompt.prompt,
-            temperature=0.7,
-            max_tokens=1000,
-            top_p=1,
-            frequency_penalty=1,
-            presence_penalty=1
-        )
+        # Check if the prompt is a job description ~ i presume should be greater than 30 characters.
+        if prompt.prompt and isinstance(prompt.prompt, str) and len(prompt.prompt.strip()) > 30:
+            # remove await if not working.
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt= GIG_PROMPTS + " \n \n "+ prompt.prompt,
+                temperature=0.7,
+                max_tokens=1000,
+                top_p=1,
+                frequency_penalty=1,
+                presence_penalty=1
+            )
 
-        # Your code to handle the prompt goes here
-        # ...
-        return {"message": response.choices[0].text}
-    else:
-        return {"message": "Sorry this does not look like a job description , try again"}
+            # Your code to handle the prompt goes here
+            # ...
+            return {"message": response.choices[0].text}
+        else:
+            return {"message": "Sorry this does not look like a job description , try again"}

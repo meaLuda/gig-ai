@@ -9,7 +9,7 @@ sys.path.append("..")
 jobwins = APIRouter()
 
 # connection to redis
-from redisclientconnect import redis_client_
+from redis_connect import redis_client_
 
 def get_env_var(var_name):
     return os.getenv(var_name)
