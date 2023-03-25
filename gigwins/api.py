@@ -77,7 +77,7 @@ async def test_prompt(prompt:Prompt):
     if prompt_count >= PROMPT_LIMIT:
         return {"error": "Too many prompts today."}
     else:
-        redis_client_.incr(f"key-from-gigwins-{key}")
+        redis_client_.incr(f"gwk-{key}")
     
         # Check if the prompt is a job description ~ i presume should be greater than 30 characters.
         if prompt.prompt and isinstance(prompt.prompt, str) and len(prompt.prompt.strip()) > 30:
