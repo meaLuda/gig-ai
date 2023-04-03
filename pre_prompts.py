@@ -12,3 +12,13 @@ Respond accordingly to the following job description: \n \n
 """
 
 # jobwins api pre-prompts
+FIT_TO_JD_PROMPTS = """ 
+Given a job description, my skills and experience, give a summary of how my skills and experience match the previously given job description:
+Give the summary in points form
+Show negatives and positives I need to improve on
+If these does not seam like a job description, reply with: "Sorry, this does not look like a job description, please try again."
+"""
+
+COVER_LETTER_FROM_JD_PROMPTS = """
+Given a job description, skills and experience that I have, respond with a brief cover letter:
+"""
