@@ -3,17 +3,28 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 import openai
 import sys
+import datetime
+
 sys.path.append("..")
-
-
-jobwins = APIRouter()
 
 # connection to redis
 from redis_connect import redis_client_
 from pre_prompts import FIT_TO_JD_PROMPTS, COVER_LETTER_FROM_JD_PROMPTS
 from .models import Prompt
+
+jobwins = APIRouter()
+
 def get_env_var(var_name):
+    """
+        ### Get environment variables from OS.
+    """
     return os.getenv(var_name)
+
+def get_current_date():
+    """
+        ### Get current date in format Year Month Date.
+    """
+    return datetime.datetime.now().strftime("%Y-%m-%d")
 
 env_dev = get_env_var('DEV')
 
@@ -32,19 +43,28 @@ if env_dev != 'True':
 KEY_TEMPLATE = 'prompt-count-{}-{}'
 
 
-
-
 # test route
-@jobwins.post('/')
-async def resume_to_jd(prompt: Prompt):
-    prompt_count = redis_client_.incr("key-from-jobwins")
-     # Check if the user has reached the prompt limit
+@jobwins.post('/prompt/')
+def resume_to_jd(prompt: Prompt):
+    user_license = prompt.supportCode
+    current_date = get_current_date()
+
+    # Define the key for storing the count of prompts for each user license
+    key = KEY_TEMPLATE.format(user_license, current_date)
+
+    prompt_count = redis_client_.incr(F"jwk-{key}")
+    
+    # Check if the user has reached the prompt limit
     if prompt_count > PROMPT_LIMIT:
-        raise HTTPException(status_code=400, detail='Prompt limit reached')
+        return {"error": "Too many prompts today."}
 
     # send to openai api
+    # if no option selected return error
+    if prompt.selectedOption == "":
+        return {"message": "Please select an option"}
 
-    if prompt.selectedOption == "My Fit To Job Description":
+
+    if prompt.selectedOption == "summarize-applicability":
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt= FIT_TO_JD_PROMPTS + " \n \n " + prompt.jobDescription + " \n \n "+ prompt.mySkills + " \n \n "+ prompt.workHistory,
@@ -54,8 +74,9 @@ async def resume_to_jd(prompt: Prompt):
             frequency_penalty=1,
             presence_penalty=1
         )
+        return {"message": response.choices[0].text}
     
-    if prompt.selectedOption == "My Work History":
+    if prompt.selectedOption == "cover-letter":
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt= COVER_LETTER_FROM_JD_PROMPTS + " \n \n " + prompt.jobDescription + " \n \n "+ prompt.mySkills + " \n \n "+ prompt.workHistory,
@@ -66,10 +87,9 @@ async def resume_to_jd(prompt: Prompt):
             presence_penalty=1
         )
 
-    # Your code to handle the prompt goes here
-    # ...
-    return {"message": response.choices[0].text}
-    return {
-        "JobWinsTest":"Success",
-        "Environemnt loaded":f"ENV VARIABLE LOADED {get_env_var('OPENAI_API_KEY_TEST')} ====> FROM JOBWINS"
-    }
+        return {"message": response.choices[0].text}
+
+    # if both options are not in the prompt return error
+    if prompt.selectedOption != "summarize-applicability" and prompt.selectedOption != "cover-letter":
+        return {"message": "Please select an option"}
+    

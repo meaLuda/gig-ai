@@ -7,8 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 # load all env variables to the system
 load_dotenv()
+
+
 from gigwins.api import gigwins as gw
 from jobwins.api import jobwins as jw
+
 app = FastAPI()
 
 origins = [
